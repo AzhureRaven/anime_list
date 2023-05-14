@@ -9,6 +9,11 @@ class AnimeProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void delete(Anime anime){
+    animeList.remove(anime);
+    notifyListeners();
+  }
+
   void initialize(BuildContext context) {
     var data = DefaultAssetBundle.of(context).loadString('assets/anime.json');
     data.then((value) => animeList = parseAnime(value));
