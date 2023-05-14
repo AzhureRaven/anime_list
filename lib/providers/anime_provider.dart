@@ -9,6 +9,10 @@ class AnimeProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void update(Anime anime){
+    notifyListeners();
+  }
+
   void delete(Anime anime){
     animeList.remove(anime);
     notifyListeners();

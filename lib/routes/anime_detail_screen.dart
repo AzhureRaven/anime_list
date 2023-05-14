@@ -14,23 +14,27 @@ class AnimeDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          if (constraints.maxWidth <= 600) {
-            return buildDetailPhone(context);
-          } else if (constraints.maxWidth <= 900) {
-            return buildDetailWeb(context, 1);
-          } else if (constraints.maxWidth <= 1200) {
-            return buildDetailWeb(context, 2);
-          } else {
-            return buildDetailWeb(context, 3);
-          }
+      body: Consumer<AnimeProvider>(
+        builder: (context, AnimeProvider data, widget) {
+          return LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              if (constraints.maxWidth <= 600) {
+                return buildDetailPhone(context, data);
+              } else if (constraints.maxWidth <= 900) {
+                return buildDetailWeb(context, 1, data);
+              } else if (constraints.maxWidth <= 1200) {
+                return buildDetailWeb(context, 2, data);
+              } else {
+                return buildDetailWeb(context, 3, data);
+              }
+            },
+          );
         },
-      ),
+      )
     );
   }
 
-  Widget buildDetailPhone(BuildContext context) {
+  Widget buildDetailPhone(BuildContext context, AnimeProvider data) {
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
@@ -57,8 +61,8 @@ class AnimeDetailScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      buildEditIconButton(context, anime),
-                      buildDeleteIconButton(context, anime)
+                      buildEditIconButton(context),
+                      buildDeleteIconButton(context, data)
                     ],
                   ),
                 ],
@@ -83,7 +87,7 @@ class AnimeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildDetailWeb(BuildContext context, int flex) {
+  Widget buildDetailWeb(BuildContext context, int flex, AnimeProvider data) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -130,8 +134,8 @@ class AnimeDetailScreen extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(child: buildAnimeName(context, anime.name)),
-                        buildEditIconButton(context, anime),
-                        buildDeleteIconButton(context, anime),
+                        buildEditIconButton(context),
+                        buildDeleteIconButton(context, data),
                       ],
                     ),
                     const SizedBox(height: 8.0),
@@ -194,7 +198,7 @@ class AnimeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildEditIconButton(BuildContext context, Anime anime) {
+  Widget buildEditIconButton(BuildContext context) {
     return IconButton(
       icon: const Icon(
         Icons.edit,
@@ -207,23 +211,19 @@ class AnimeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildDeleteIconButton(BuildContext context, Anime anime) {
+  Widget buildDeleteIconButton(BuildContext context, AnimeProvider data) {
     return IconButton(
       onPressed: () {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return Consumer<AnimeProvider>(
-              builder: (context, AnimeProvider data, widget) {
-                return YesNoDialog(
-                  onSuccess: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(basicSnackBar("Anime Deleted"));
-                    data.delete(anime);
-                  },
-                );
+            return YesNoDialog(
+              onSuccess: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(basicSnackBar("Anime Deleted"));
+                data.delete(anime);
               },
             );
           },

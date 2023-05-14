@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/anime.dart';
+import '../providers/anime_provider.dart';
 import '../utlis/snackbar.dart';
 import 'manage_anime_screen.dart';
 
@@ -13,9 +15,15 @@ class UpdateAnimeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Edit Anime"),
       ),
-      body: ManageAnimeScreen(onSuccess: (){
-        ScaffoldMessenger.of(context).showSnackBar(basicSnackBar("Anime Updated"));
-      }, anime: anime),
+      body: Consumer<AnimeProvider>(
+        builder: (context, AnimeProvider data, widget) {
+          return ManageAnimeScreen(onSuccess: (){
+            ScaffoldMessenger.of(context).showSnackBar(basicSnackBar("Anime Updated"));
+            data.update(anime);
+            Navigator.pop(context);
+          }, anime: anime);
+        },
+      )
     );
   }
 }

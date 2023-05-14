@@ -21,6 +21,7 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
   late final TextEditingController _catController;
   late final TextEditingController _studioController;
   late final TextEditingController _imgController;
+  String mode = "add";
 
   @override
   void initState() {
@@ -33,6 +34,20 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
     _catController = TextEditingController();
     _studioController = TextEditingController();
     _imgController = TextEditingController();
+    isEditAnime();
+  }
+
+  void isEditAnime(){
+    if(widget.anime != null){
+      mode = "edit";
+      _nameController.text = widget.anime!.name;
+      _descController.text = widget.anime!.description;
+      _epController.text = widget.anime!.episode.toString();
+      _ratingController.text = widget.anime!.rating;
+      _catController.text = widget.anime!.categorie;
+      _studioController.text = widget.anime!.studio;
+      _imgController.text = widget.anime!.img;
+    }
   }
 
   @override
@@ -163,7 +178,18 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
                             child: ElevatedButton(onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
-                                  data.add(Anime(name: _nameController.text, description: _descController.text, rating: _descController.text, episode: int.parse(_epController.text), categorie: _catController.text, studio: _studioController.text, img: _imgController.text));
+                                  if(mode == "add"){
+                                    data.add(Anime(name: _nameController.text, description: _descController.text, rating: _ratingController.text, episode: int.parse(_epController.text), categorie: _catController.text, studio: _studioController.text, img: _imgController.text));
+                                  }
+                                  else{
+                                    widget.anime!.name = _nameController.text;
+                                    widget.anime!.description = _descController.text;
+                                    widget.anime!.rating = _ratingController.text;
+                                    widget.anime!.episode = int.parse(_epController.text);
+                                    widget.anime!.categorie = _catController.text;
+                                    widget.anime!.studio = _studioController.text;
+                                    widget.anime!.img = _imgController.text;
+                                  }
                                   widget.onSuccess.call();
                                 }
                               }, child: const Text("Submit")),
