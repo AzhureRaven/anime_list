@@ -1,7 +1,6 @@
-import 'package:anime_list/routes/add_anime_screen.dart';
+import 'package:anime_list/routes/manage_anime_screen.dart';
 import 'package:anime_list/routes/anime_list_screen.dart';
 import 'package:flutter/material.dart';
-
 import '../utlis/snackbar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: LayoutBuilder(builder: (context, constraints) {
         switch(pil){
           case 0: return AnimeListScreen(); break;
-          case 1: return AddAnimeScreen(onSuccess: (){
+          case 1: return ManageAnimeScreen(onSuccess: (){
            setState(() {
              pil = 0;
              ScaffoldMessenger.of(context).showSnackBar(basicSnackBar("New Anime Added"));

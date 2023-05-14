@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/anime_provider.dart';
 
-class AddAnimeScreen extends StatefulWidget {
+class ManageAnimeScreen extends StatefulWidget {
   final VoidCallback onSuccess;
-  const AddAnimeScreen({Key? key, required this.onSuccess}) : super(key: key);
+  final Anime? anime;
+  const ManageAnimeScreen({Key? key, required this.onSuccess, this.anime}) : super(key: key);
 
   @override
-  State<AddAnimeScreen> createState() => _AddAnimeScreenState();
+  State<ManageAnimeScreen> createState() => _ManageAnimeScreenState();
 }
 
-class _AddAnimeScreenState extends State<AddAnimeScreen> {
+class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
   late final GlobalKey<FormState> _formKey;
   late final TextEditingController _nameController;
   late final TextEditingController _descController;

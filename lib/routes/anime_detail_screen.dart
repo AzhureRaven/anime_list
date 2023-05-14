@@ -1,4 +1,5 @@
 import 'package:anime_list/providers/anime_provider.dart';
+import 'package:anime_list/routes/update_anime_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../dialogs/yes_no_dialog.dart';
@@ -42,17 +43,26 @@ class AnimeDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   buildBackIconButton(context),
-                  Stack(
+                  Column(
                     children: [
-                      buildAnimeImage(context, anime.img),
-                      buildZoomIconButton(context, anime),
+                      Stack(
+                        children: [
+                          buildAnimeImage(context, anime.img),
+                          buildZoomIconButton(context, anime),
+                        ],
+                      ),
+                      buildAnimeName(context, anime.name),
                     ],
                   ),
-                  buildDeleteIconButton(context, anime)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      buildEditIconButton(context, anime),
+                      buildDeleteIconButton(context, anime)
+                    ],
+                  ),
                 ],
               ),
-              const SizedBox(height: 8.0),
-              buildAnimeName(context, anime.name),
               const SizedBox(height: 8.0),
               Text(anime.description),
               const SizedBox(height: 8.0),
@@ -80,21 +90,29 @@ class AnimeDetailScreen extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Stack(
-                  children: [
-                    buildAnimeImage(context, anime.img),
-                    buildZoomIconButton(context, anime),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    buildAnimeRating(context, anime.rating),
-                    buildAnimeEpisode(context, anime.episode),
-                    buildAnimeStudio(context, anime.studio),
-                  ],
+                buildBackIconButton(context),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          buildAnimeImage(context, anime.img),
+                          buildZoomIconButton(context, anime),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          buildAnimeRating(context, anime.rating),
+                          buildAnimeEpisode(context, anime.episode),
+                          buildAnimeStudio(context, anime.studio),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -109,7 +127,13 @@ class AnimeDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    buildAnimeName(context, anime.name),
+                    Row(
+                      children: [
+                        Expanded(child: buildAnimeName(context, anime.name)),
+                        buildEditIconButton(context, anime),
+                        buildDeleteIconButton(context, anime),
+                      ],
+                    ),
                     const SizedBox(height: 8.0),
                     Text(anime.description),
                     const SizedBox(height: 8.0),
@@ -120,7 +144,6 @@ class AnimeDetailScreen extends StatelessWidget {
             ),
           ),
         ),
-        buildDeleteIconButton(context, anime),
       ],
     );
   }
@@ -171,6 +194,19 @@ class AnimeDetailScreen extends StatelessWidget {
     );
   }
 
+  Widget buildEditIconButton(BuildContext context, Anime anime) {
+    return IconButton(
+      icon: const Icon(
+        Icons.edit,
+      ),
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context){
+          return UpdateAnimeScreen(anime: anime);
+        }));
+      },
+    );
+  }
+
   Widget buildDeleteIconButton(BuildContext context, Anime anime) {
     return IconButton(
       onPressed: () {
@@ -198,16 +234,13 @@ class AnimeDetailScreen extends StatelessWidget {
   }
 
   Widget buildAnimeName(BuildContext context, String name) {
-    return Container(
-      width: double.infinity,
-      child: Text(
-        name,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-        textAlign: TextAlign.center,
+    return Text(
+      name,
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
       ),
+      textAlign: TextAlign.center,
     );
   }
 

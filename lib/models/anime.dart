@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 class Anime {
-  final String name;
-  final String description;
-  final String rating;
-  final int episode;
-  final String categorie;
-  final String studio;
-  final String img;
+  String name;
+  String description;
+  String rating;
+  int episode;
+  String categorie;
+  String studio;
+  String img;
 
   Anime({required this.name,
       required this.description,
