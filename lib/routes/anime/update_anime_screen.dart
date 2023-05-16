@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/anime.dart';
-import '../providers/anime_provider.dart';
-import '../utlis/snackbar.dart';
+import '../../models/anime.dart';
+import '../../providers/anime_provider.dart';
+import '../../utlis/snackbar.dart';
 import 'manage_anime_screen.dart';
 
 class UpdateAnimeScreen extends StatelessWidget {

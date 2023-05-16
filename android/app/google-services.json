@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "591831940582",
+    "project_id": "projek-mpp-anime-list",
+    "storage_bucket": "projek-mpp-anime-list.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591831940582:android:45dbda436bd6312fda6a27",
+        "android_client_info": {
+          "package_name": "com.example.anime_list"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "591831940582-28o8sgt020k5gdk919c8gn0g7nal2njr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5H1x_zTPYUA_WSLw6jfMLPWdIS1zS19Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "591831940582-28o8sgt020k5gdk919c8gn0g7nal2njr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

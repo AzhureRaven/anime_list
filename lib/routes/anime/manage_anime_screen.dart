@@ -1,7 +1,7 @@
 import 'package:anime_list/models/anime.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/anime_provider.dart';
+import '../../providers/anime_provider.dart';
 
 class ManageAnimeScreen extends StatefulWidget {
   final VoidCallback onSuccess;

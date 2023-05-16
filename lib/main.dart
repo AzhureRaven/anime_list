@@ -1,6 +1,8 @@
 import 'package:anime_list/providers/anime_provider.dart';
+import 'package:anime_list/routes/account/login_screen.dart';
 import 'package:anime_list/routes/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -15,11 +17,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context)=>AnimeProvider(),
-      child: MaterialApp(
-        title: 'Anime List',
-        theme: ThemeData.light(),
-        darkTheme: ThemeData.dark(),
-        home: const HomeScreen(),
+      child: GlobalLoaderOverlay(
+        child: MaterialApp(
+          title: 'Anime List',
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          home: const LoginScreen(),
+        ),
       ),
     );
   }

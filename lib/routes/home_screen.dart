@@ -1,5 +1,5 @@
-import 'package:anime_list/routes/manage_anime_screen.dart';
-import 'package:anime_list/routes/anime_list_screen.dart';
+import 'package:anime_list/routes/anime/manage_anime_screen.dart';
+import 'package:anime_list/routes/anime/anime_list_screen.dart';
 import 'package:flutter/material.dart';
 import '../utlis/snackbar.dart';
 
@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: LayoutBuilder(builder: (context, constraints) {
         switch(pil){
-          case 0: return AnimeListScreen(); break;
+          case 0: return const AnimeListScreen(); break;
           case 1: return ManageAnimeScreen(onSuccess: (){
            setState(() {
              pil = 0;

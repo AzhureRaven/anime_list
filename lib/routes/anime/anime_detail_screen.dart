@@ -1,10 +1,10 @@
 import 'package:anime_list/providers/anime_provider.dart';
-import 'package:anime_list/routes/update_anime_screen.dart';
+import 'package:anime_list/routes/anime/update_anime_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../dialogs/yes_no_dialog.dart';
-import '../models/anime.dart';
-import '../utlis/snackbar.dart';
+import '../../dialogs/yes_no_dialog.dart';
+import '../../models/anime.dart';
+import '../../utlis/snackbar.dart';
 import 'anime_image_screen.dart';
 
 class AnimeDetailScreen extends StatelessWidget {

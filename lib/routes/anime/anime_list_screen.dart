@@ -1,9 +1,8 @@
 import 'package:anime_list/providers/anime_provider.dart';
-import 'package:anime_list/routes/anime_detail_screen.dart';
+import 'package:anime_list/routes/anime/anime_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../models/anime.dart';
+import '../../models/anime.dart';
 
 class AnimeListScreen extends StatefulWidget {
   const AnimeListScreen({Key? key}) : super(key: key);
