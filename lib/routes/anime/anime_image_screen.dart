@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 import '../../models/anime.dart';
 
 class AnimeImageScreen extends StatelessWidget {
@@ -15,7 +16,7 @@ class AnimeImageScreen extends StatelessWidget {
       body: Center(
         child: Hero(
           tag: anime.img,
-          child: Image.network(anime.img),
+          child: PhotoView(imageProvider: NetworkImage(anime.img)),
         ),
       ),
     );

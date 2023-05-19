@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../utlis/snackbar.dart';
 
@@ -10,8 +12,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final _auth = FirebaseAuth.instance;
   GlobalKey<FormState> _formKey = GlobalKey <FormState>();
-  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
 
@@ -27,11 +30,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const Text('Anime List', style: TextStyle(fontSize: 24)),
                 const SizedBox(height: 24),
                 const Text('Create your account', style: TextStyle(fontSize: 18)),
                 const SizedBox(height: 24),
                 TextFormField(
-                  controller: _usernameController,
+                  controller: _emailController,
                   textInputAction: TextInputAction.next,
                   validator: (data) {
                     if (data != null && data != "") {
@@ -42,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Username'
+                      labelText: 'Email'
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -75,13 +79,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () async{
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(basicSnackBar("Register Succesful!"));
+                      context.loaderOverlay.show();
+                      try{
+                        final navigator = Navigator.of(context);
+                        final snackbar = ScaffoldMessenger.of(context);
+                        final email = _emailController.text;
+                        final password = _passwordController.text;
+                        await _auth.createUserWithEmailAndPassword(email: email, password: password);
+                        navigator.pop();
+                        snackbar.showSnackBar(basicSnackBar("Register Succesful!"));
+                      }catch(e){
+                        ScaffoldMessenger.of(context).showSnackBar(basicSnackBar(e.toString()));
+                      }finally{
+                        context.loaderOverlay.hide();
+                      }
                     }
-                    /*final email = _usernameController.text;
-                    final password = _passwordController.text;
-                    final snackbar = SnackBar(content: Text(email));
-                    ScaffoldMessenger.of(context).showSnackBar(snackbar);*/
                   },
                   child: const Text('Register', style: TextStyle(fontSize: 18)),
                 ),
@@ -98,6 +110,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     super.dispose();
     _passwordController.dispose();
-    _usernameController.dispose();
+    _emailController.dispose();
   }
 }
