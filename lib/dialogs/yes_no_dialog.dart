@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 class YesNoDialog extends StatelessWidget {
   final VoidCallback onSuccess;
-  const YesNoDialog({Key? key, required this.onSuccess}) : super(key: key);
+  final String title;
+  final String content;
+  const YesNoDialog({Key? key, required this.onSuccess, required this.title, required this.content}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Delete Anime?"),
-      content: const Text("Deleted Anime cannot be recovered."),
+      title: Text(title),
+      content: Text(content),
       actions: [
         TextButton(onPressed: () {
           Navigator.pop(context);

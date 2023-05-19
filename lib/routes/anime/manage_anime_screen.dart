@@ -21,6 +21,7 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
   late final TextEditingController _studioController;
   late final TextEditingController _imgController;
   String mode = "add";
+  int flex = 0;
 
   @override
   void initState() {
@@ -51,153 +52,156 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
   Widget build(BuildContext context) {
     return Consumer<AnimeProvider>(
         builder: (context, AnimeProvider data, widgets){
-          return SingleChildScrollView(
-            child: Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        controller: _nameController,
-                        textInputAction: TextInputAction.next,
-                        validator: (data) {
-                          if (data != null && data != "") {
-                            return null;
-                          } else {
-                            return "Field is required!";
-                          }
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Name",
-                        ),
-                      ),
-                      TextFormField(
-                        controller: _descController,
-                        textInputAction: TextInputAction.next,
-                        validator: (data) {
-                          if (data != null && data != "") {
-                            return null;
-                          } else {
-                            return "Field is required!";
-                          }
-                        },
-                        decoration: const InputDecoration(
-                            labelText: "Description"
-                        ),
-                      ),
-                      TextFormField(
-                        controller: _ratingController,
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
-                        validator: (data) {
-                          if(data == null || data == ""){
-                            return "Field is required!";
-                          }
-                          if(double.tryParse(data.toString()) == null){
-                            return "Field must be number!";
-                          }
-                          if(1 > double.parse(data.toString()) || 10 < double.parse(data.toString())){
-                            return "Field must be between 1-10!";
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Rating",
-                        ),
-                      ),
-                      /*TextFormField(
-                        controller: _epController,
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
-                        validator: (data) {
-                          if(data == null || data == ""){
-                            return "Field is required!";
-                          }
-                          if(int.tryParse(data.toString()) == null){
-                            return "Field must be integer!";
-                          }
-                          if(1 > int.parse(data.toString())){
-                            return "Field must be between > 0!";
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Episode",
-                        ),
-                      ),*/
-                      TextFormField(
-                        controller: _catController,
-                        textInputAction: TextInputAction.next,
-                        validator: (data) {
-                          if (data != null && data != "") {
-                            return null;
-                          } else {
-                            return "Field is required!";
-                          }
-                        },
-                        decoration: const InputDecoration(
-                            labelText: "Categories"
-                        ),
-                      ),
-                      TextFormField(
-                        controller: _studioController,
-                        textInputAction: TextInputAction.next,
-                        validator: (data) {
-                          if (data != null && data != "") {
-                            return null;
-                          } else {
-                            return "Field is required!";
-                          }
-                        },
-                        decoration: const InputDecoration(
-                            labelText: "Studio"
-                        ),
-                      ),
-                      TextFormField(
-                        controller: _imgController,
-                        validator: (data) {
-                          if (data != null && data != "") {
-                            return null;
-                          } else {
-                            return "Field is required!";
-                          }
-                        },
-                        decoration: const InputDecoration(
-                            labelText: "Img Link"
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      Row(
+          return LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                if (constraints.maxWidth <= 600) {
+                  flex = 0;
+                } else if (constraints.maxWidth <= 1200) {
+                  flex = 1;
+                } else {
+                  flex = 2;
+                }
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    child: Form(
+                      key: _formKey,
+                      child: Row(
                         children: [
+                          Expanded(flex: flex, child: Row()),
                           Expanded(
-                            child: ElevatedButton(onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  if(mode == "add"){
-                                    data.add(Anime(name: _nameController.text, description: _descController.text, rating: _ratingController.text, episodes: [], categories: _catController.text, studio: _studioController.text, img: _imgController.text));
-                                  }
-                                  else{
-                                    widget.anime!.name = _nameController.text;
-                                    widget.anime!.description = _descController.text;
-                                    widget.anime!.rating = _ratingController.text;
-                                    widget.anime!.categories = _catController.text;
-                                    widget.anime!.studio = _studioController.text;
-                                    widget.anime!.img = _imgController.text;
-                                  }
-                                  widget.onSuccess.call();
-                                }
-                              }, child: const Text("Submit")),
+                              flex: 2,
+                              child: buildForm(data)
                           ),
+                          Expanded(flex: flex, child: Row())
                         ],
-                      )
-                    ],
+                      ),
+                    ),
                   ),
-                )
-            ),
-          );
+                );
+              });
         }
+    );
+  }
+
+  Widget buildForm(AnimeProvider data){
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextFormField(
+          controller: _nameController,
+          textInputAction: TextInputAction.next,
+          validator: (data) {
+            if (data != null && data != "") {
+              return null;
+            } else {
+              return "Field is required!";
+            }
+          },
+          decoration: const InputDecoration(
+            labelText: "Name",
+          ),
+        ),
+        TextFormField(
+          controller: _descController,
+          textInputAction: TextInputAction.next,
+          validator: (data) {
+            if (data != null && data != "") {
+              return null;
+            } else {
+              return "Field is required!";
+            }
+          },
+          decoration: const InputDecoration(
+              labelText: "Description"
+          ),
+        ),
+        TextFormField(
+          controller: _ratingController,
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.next,
+          validator: (data) {
+            if(data == null || data == ""){
+              return "Field is required!";
+            }
+            if(double.tryParse(data.toString()) == null){
+              return "Field must be number!";
+            }
+            if(1 > double.parse(data.toString()) || 10 < double.parse(data.toString())){
+              return "Field must be between 1-10!";
+            }
+            return null;
+          },
+          decoration: const InputDecoration(
+            labelText: "Rating",
+          ),
+        ),
+        TextFormField(
+          controller: _catController,
+          textInputAction: TextInputAction.next,
+          validator: (data) {
+            if (data != null && data != "") {
+              return null;
+            } else {
+              return "Field is required!";
+            }
+          },
+          decoration: const InputDecoration(
+              labelText: "Categories"
+          ),
+        ),
+        TextFormField(
+          controller: _studioController,
+          textInputAction: TextInputAction.next,
+          validator: (data) {
+            if (data != null && data != "") {
+              return null;
+            } else {
+              return "Field is required!";
+            }
+          },
+          decoration: const InputDecoration(
+              labelText: "Studio"
+          ),
+        ),
+        TextFormField(
+          controller: _imgController,
+          validator: (data) {
+            if (data != null && data != "") {
+              return null;
+            } else {
+              return "Field is required!";
+            }
+          },
+          decoration: const InputDecoration(
+              labelText: "Img Link"
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  if(mode == "add"){
+                    data.add(Anime(name: _nameController.text, description: _descController.text, rating: _ratingController.text, episodes: [], categories: _catController.text, studio: _studioController.text, img: _imgController.text));
+                  }
+                  else{
+                    widget.anime!.name = _nameController.text;
+                    widget.anime!.description = _descController.text;
+                    widget.anime!.rating = _ratingController.text;
+                    widget.anime!.categories = _catController.text;
+                    widget.anime!.studio = _studioController.text;
+                    widget.anime!.img = _imgController.text;
+                  }
+                  widget.onSuccess.call();
+                }
+              }, child: const Text("Submit")),
+            ),
+          ],
+        )
+      ],
     );
   }
 }

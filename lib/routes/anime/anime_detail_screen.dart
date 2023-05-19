@@ -230,7 +230,7 @@ class AnimeDetailScreen extends StatelessWidget {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(basicSnackBar("Anime Deleted"));
                 data.delete(anime);
-              },
+              }, title: 'Delete Anime?', content: 'Deleted Anime cannot be recovered',
             );
           },
         );
