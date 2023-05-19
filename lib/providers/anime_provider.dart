@@ -9,10 +9,6 @@ class AnimeProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void update(Anime anime){
-    notifyListeners();
-  }
-
   void notify(){
     notifyListeners();
   }
