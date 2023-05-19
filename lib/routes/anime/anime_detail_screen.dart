@@ -1,5 +1,7 @@
+import 'package:anime_list/models/episode.dart';
 import 'package:anime_list/providers/anime_provider.dart';
 import 'package:anime_list/routes/anime/update_anime_screen.dart';
+import 'package:anime_list/routes/episode/episode_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../dialogs/yes_no_dialog.dart';
@@ -51,11 +53,11 @@ class AnimeDetailScreen extends StatelessWidget {
                     children: [
                       Stack(
                         children: [
-                          buildAnimeImage(context, anime.img),
+                          buildAnimeImage(anime.img),
                           buildZoomIconButton(context, anime),
                         ],
                       ),
-                      buildAnimeName(context, anime.name),
+                      buildAnimeName(anime.name),
                     ],
                   ),
                   Row(
@@ -70,16 +72,18 @@ class AnimeDetailScreen extends StatelessWidget {
               const SizedBox(height: 8.0),
               Text(anime.description),
               const SizedBox(height: 8.0),
-              Text("Category: ${anime.categorie}"),
+              Text("Category: ${anime.categories}"),
               const SizedBox(height: 8.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  buildAnimeRating(context, anime.rating),
-                  buildAnimeEpisode(context, anime.episode),
-                  buildAnimeStudio(context, anime.studio),
+                  buildAnimeRating(anime.rating),
+                  buildAnimeEpisodeNum(anime.episodes),
+                  buildAnimeStudio(anime.studio),
                 ],
               ),
+              const SizedBox(height: 8.0),
+              buildAnimeEpisode()
             ],
           ),
         ),
@@ -103,16 +107,16 @@ class AnimeDetailScreen extends StatelessWidget {
                     children: [
                       Stack(
                         children: [
-                          buildAnimeImage(context, anime.img),
+                          buildAnimeImage(anime.img),
                           buildZoomIconButton(context, anime),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          buildAnimeRating(context, anime.rating),
-                          buildAnimeEpisode(context, anime.episode),
-                          buildAnimeStudio(context, anime.studio),
+                          buildAnimeRating(anime.rating),
+                          buildAnimeEpisodeNum(anime.episodes),
+                          buildAnimeStudio(anime.studio),
                         ],
                       ),
                     ],
@@ -133,7 +137,7 @@ class AnimeDetailScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Expanded(child: buildAnimeName(context, anime.name)),
+                        Expanded(child: buildAnimeName(anime.name)),
                         buildEditIconButton(context),
                         buildDeleteIconButton(context, data),
                       ],
@@ -141,7 +145,9 @@ class AnimeDetailScreen extends StatelessWidget {
                     const SizedBox(height: 8.0),
                     Text(anime.description),
                     const SizedBox(height: 8.0),
-                    Text("Category: ${anime.categorie}"),
+                    Text("Category: ${anime.categories}"),
+                    const SizedBox(height: 8.0),
+                    buildAnimeEpisode()
                   ],
                 ),
               ),
@@ -153,7 +159,7 @@ class AnimeDetailScreen extends StatelessWidget {
   }
 
 
-  Widget buildAnimeImage(BuildContext context, String img) {
+  Widget buildAnimeImage(String img) {
     return Hero(
       tag: img,
       child: Image.network(
@@ -233,7 +239,7 @@ class AnimeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildAnimeName(BuildContext context, String name) {
+  Widget buildAnimeName(String name) {
     return Text(
       name,
       style: const TextStyle(
@@ -244,7 +250,7 @@ class AnimeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildAnimeRating(BuildContext context, String rating) {
+  Widget buildAnimeRating(String rating) {
     return Column(
       children: [
         const Icon(Icons.star),
@@ -254,17 +260,17 @@ class AnimeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildAnimeEpisode(BuildContext context, int episode) {
+  Widget buildAnimeEpisodeNum(List<Episode> episodes) {
     return Column(
       children: [
         const Icon(Icons.tv),
         const SizedBox(width: 8.0),
-        Text("$episode"),
+        Text("${episodes.length}"),
       ],
     );
   }
 
-  Widget buildAnimeStudio(BuildContext context, String studio) {
+  Widget buildAnimeStudio(String studio) {
     return Column(
       children: [
         const Icon(Icons.movie),
@@ -274,5 +280,7 @@ class AnimeDetailScreen extends StatelessWidget {
     );
   }
 
-
+  Widget buildAnimeEpisode() {
+    return EpisodeList(anime: anime);
+  }
 }

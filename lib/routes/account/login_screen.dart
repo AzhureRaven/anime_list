@@ -1,4 +1,5 @@
 import 'package:anime_list/routes/account/register_screen.dart';
+import 'package:anime_list/routes/anime/anime_list_screen.dart';
 import 'package:anime_list/routes/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> _formKey = GlobalKey <FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  bool _obscureText = true;
+  bool _passVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: _passwordController,
                   keyboardType: TextInputType.visiblePassword,
-                  obscureText: _obscureText,
+                  obscureText: _passVisible,
                   validator: (data) {
                     if (data != null && data != "") {
                       return null;
@@ -69,10 +70,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
-                          _obscureText = !_obscureText;
+                          _passVisible = !_passVisible;
                         });
                       },
-                      child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                      child: Icon(_passVisible ? Icons.visibility : Icons.visibility_off),
                     ),
                   ),
                 ),
@@ -89,6 +90,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         final password = _passwordController.text;
                         await _auth.signInWithEmailAndPassword(email: email, password: password);
                         navigator.pop();
+                        navigator.push(MaterialPageRoute(builder: (context){
+                          return HomeScreen();
+                        }));
                         snackbar.showSnackBar(basicSnackBar("Login Succesful!"));
                       }catch(e){
                         ScaffoldMessenger.of(context).showSnackBar(basicSnackBar(e.toString()));

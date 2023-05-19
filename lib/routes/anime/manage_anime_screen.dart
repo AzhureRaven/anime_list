@@ -17,7 +17,6 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _descController;
   late final TextEditingController _ratingController;
-  late final TextEditingController _epController;
   late final TextEditingController _catController;
   late final TextEditingController _studioController;
   late final TextEditingController _imgController;
@@ -29,22 +28,20 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
     _formKey = GlobalKey <FormState>();
     _nameController = TextEditingController();
     _descController = TextEditingController();
-    _epController = TextEditingController();
     _ratingController = TextEditingController();
     _catController = TextEditingController();
     _studioController = TextEditingController();
     _imgController = TextEditingController();
-    isEditAnime();
+    isEdit();
   }
 
-  void isEditAnime(){
+  void isEdit(){
     if(widget.anime != null){
       mode = "edit";
       _nameController.text = widget.anime!.name;
       _descController.text = widget.anime!.description;
-      _epController.text = widget.anime!.episode.toString();
       _ratingController.text = widget.anime!.rating;
-      _catController.text = widget.anime!.categorie;
+      _catController.text = widget.anime!.categories;
       _studioController.text = widget.anime!.studio;
       _imgController.text = widget.anime!.img;
     }
@@ -110,7 +107,7 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
                           labelText: "Rating",
                         ),
                       ),
-                      TextFormField(
+                      /*TextFormField(
                         controller: _epController,
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.next,
@@ -129,7 +126,7 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
                         decoration: const InputDecoration(
                           labelText: "Episode",
                         ),
-                      ),
+                      ),*/
                       TextFormField(
                         controller: _catController,
                         textInputAction: TextInputAction.next,
@@ -179,14 +176,13 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
                                   if(mode == "add"){
-                                    data.add(Anime(name: _nameController.text, description: _descController.text, rating: _ratingController.text, episode: int.parse(_epController.text), categorie: _catController.text, studio: _studioController.text, img: _imgController.text));
+                                    data.add(Anime(name: _nameController.text, description: _descController.text, rating: _ratingController.text, episodes: [], categories: _catController.text, studio: _studioController.text, img: _imgController.text));
                                   }
                                   else{
                                     widget.anime!.name = _nameController.text;
                                     widget.anime!.description = _descController.text;
                                     widget.anime!.rating = _ratingController.text;
-                                    widget.anime!.episode = int.parse(_epController.text);
-                                    widget.anime!.categorie = _catController.text;
+                                    widget.anime!.categories = _catController.text;
                                     widget.anime!.studio = _studioController.text;
                                     widget.anime!.img = _imgController.text;
                                   }

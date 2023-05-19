@@ -1,19 +1,21 @@
 import 'dart:convert';
 
+import 'package:anime_list/models/episode.dart';
+
 class Anime {
   String name;
   String description;
   String rating;
-  int episode;
-  String categorie;
+  List<Episode> episodes;
+  String categories;
   String studio;
   String img;
 
   Anime({required this.name,
       required this.description,
       required this.rating,
-      required this.episode,
-      required this.categorie,
+      required this.episodes,
+      required this.categories,
       required this.studio,
       required this.img});
 
@@ -22,8 +24,8 @@ class Anime {
       name: json['name'].toString(),
       description: json['description'].toString(),
       rating: json['rating'].toString(),
-      episode: int.parse(json['episode'].toString()),
-      categorie: json['categorie'].toString(),
+      episodes: [],
+      categories: json['categorie'].toString(),
       studio: json['studio'].toString(),
       img: json['img'].toString()
     );
@@ -34,8 +36,7 @@ class Anime {
     data['name'] = this.name;
     data['description'] = this.description;
     data['rating'] = this.rating;
-    data['episode'] = this.episode;
-    data['categorie'] = this.categorie;
+    data['categorie'] = this.categories;
     data['studio'] = this.studio;
     data['img'] = this.img;
     return data;

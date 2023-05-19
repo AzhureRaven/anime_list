@@ -16,7 +16,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   GlobalKey<FormState> _formKey = GlobalKey <FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  bool _obscureText = true;
+  TextEditingController _confPassController = TextEditingController();
+  bool _passVisible = true;
+  bool _confPassVisible  = true;
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +54,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _passwordController,
+                  textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.visiblePassword,
-                  obscureText: _obscureText,
+                  obscureText: _passVisible,
                   validator: (data) {
                     if (data != null && data != "") {
                       return null;
@@ -67,10 +70,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
-                          _obscureText = !_obscureText;
+                          _passVisible = !_passVisible;
                         });
                       },
-                      child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                      child: Icon(_passVisible ? Icons.visibility : Icons.visibility_off),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _confPassController,
+                  obscureText: _confPassVisible,
+                  validator: (data) {
+                    if (data != null && data != "") {
+                      if(data != _passwordController.text){
+                        return "Confirm Password Invalid";
+                      }
+                      else{
+                        return null;
+                      }
+                    }
+                    else {
+                      return "Field is required";
+                    }
+                  },
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: "Confirm Password",
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _confPassVisible = !_confPassVisible;
+                        });
+                      },
+                      child: Icon(_confPassVisible ? Icons.visibility : Icons.visibility_off),
                     ),
                   ),
                 ),

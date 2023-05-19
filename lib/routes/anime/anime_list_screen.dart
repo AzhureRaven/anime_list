@@ -142,7 +142,7 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
                       children: [
                         const Icon(Icons.tv),
                         const SizedBox(width: 8.0),
-                        Text("${anime.episode}"),
+                        Text("${anime.episodes.length}"),
                       ],
                     ),
                     const SizedBox(height: 8.0),
@@ -201,7 +201,7 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
                                 children: [
                                   const Icon(Icons.tv),
                                   const SizedBox(width: 8.0),
-                                  Text("${anime.episode}"),
+                                  Text("${anime.episodes.length}"),
                                 ],
                               ),
                               Column(
