@@ -50,8 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return ManageAnimeScreen(onSuccess: () {
               setState(() {
                 pil = 0;
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(basicSnackBar("New Anime Added"));
+                ScaffoldMessenger.of(context).showSnackBar(basicSnackBar("New Anime Added"));
               });
             });
             break;

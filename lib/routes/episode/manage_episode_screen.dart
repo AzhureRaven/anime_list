@@ -41,6 +41,13 @@ class _ManageEpisodeScreenState extends State<ManageEpisodeScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _noController.dispose();
+    _nameController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<AnimeProvider>(
         builder: (context, AnimeProvider data, widgets){
@@ -140,6 +147,7 @@ class _ManageEpisodeScreenState extends State<ManageEpisodeScreen> {
                     widget.episode!.no = int.parse(_noController.text.toString());
                     widget.episode!.watched = watched;
                   }
+                  data.notify();
                   widget.onSuccess.call();
                 }
               }, child: const Text("Submit")),

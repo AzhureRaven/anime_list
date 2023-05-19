@@ -38,9 +38,9 @@ class AnimeDetailScreen extends StatelessWidget {
 
   Widget buildDetailPhone(BuildContext context, AnimeProvider data) {
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -83,7 +83,7 @@ class AnimeDetailScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8.0),
-              buildAnimeEpisode()
+              buildAnimeEpisode(data)
             ],
           ),
         ),
@@ -92,69 +92,71 @@ class AnimeDetailScreen extends StatelessWidget {
   }
 
   Widget buildDetailWeb(BuildContext context, int flex, AnimeProvider data) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildBackIconButton(context),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          buildAnimeImage(anime.img),
-                          buildZoomIconButton(context, anime),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          buildAnimeRating(anime.rating),
-                          buildAnimeEpisodeNum(anime.episodes),
-                          buildAnimeStudio(anime.studio),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Expanded(
-          flex: flex,
-          child: Card(
+    return SafeArea(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildBackIconButton(context),
+                  Expanded(
+                    child: Column(
                       children: [
-                        Expanded(child: buildAnimeName(anime.name)),
-                        buildEditIconButton(context),
-                        buildDeleteIconButton(context, data),
+                        Stack(
+                          children: [
+                            buildAnimeImage(anime.img),
+                            buildZoomIconButton(context, anime),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            buildAnimeRating(anime.rating),
+                            buildAnimeEpisodeNum(anime.episodes),
+                            buildAnimeStudio(anime.studio),
+                          ],
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 8.0),
-                    Text(anime.description),
-                    const SizedBox(height: 8.0),
-                    Text("Category: ${anime.categories}"),
-                    const SizedBox(height: 8.0),
-                    buildAnimeEpisode()
-                  ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: flex,
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(child: buildAnimeName(anime.name)),
+                          buildEditIconButton(context),
+                          buildDeleteIconButton(context, data),
+                        ],
+                      ),
+                      const SizedBox(height: 8.0),
+                      Text(anime.description),
+                      const SizedBox(height: 8.0),
+                      Text("Category: ${anime.categories}"),
+                      const SizedBox(height: 8.0),
+                      buildAnimeEpisode(data)
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -280,7 +282,7 @@ class AnimeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildAnimeEpisode() {
-    return EpisodeList(anime: anime);
+  Widget buildAnimeEpisode(AnimeProvider data) {
+    return EpisodeList(anime: anime, data: data);
   }
 }

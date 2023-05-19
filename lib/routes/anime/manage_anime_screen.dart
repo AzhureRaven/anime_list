@@ -49,6 +49,17 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _descController.dispose();
+    _ratingController.dispose();
+    _catController.dispose();
+    _studioController.dispose();
+    _imgController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<AnimeProvider>(
         builder: (context, AnimeProvider data, widgets){
