@@ -19,7 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Anime List"),
+        title: Image.asset(
+          'images/splash.jpg',
+          fit: BoxFit.fitWidth,
+          width: 100,
+        ),
         actions: [
           IconButton(
             onPressed: () {

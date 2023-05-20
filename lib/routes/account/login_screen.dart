@@ -4,6 +4,7 @@ import 'package:anime_list/routes/anime/anime_list_screen.dart';
 import 'package:anime_list/routes/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../utlis/snackbar.dart';
@@ -33,7 +34,10 @@ class _LoginScreenState extends State<LoginScreen> {
     if(!SecuredStorage.isEmpty()){
       _emailController.text = SecuredStorage.getUser();
       _passwordController.text = SecuredStorage.getPass();
-      doLogin();
+      doLogin(true);
+    }
+    else{
+      FlutterNativeSplash.remove();
     }
   }
 
@@ -124,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
-              doLogin();
+              doLogin(false);
             }
           },
           child: const Text('Login', style: TextStyle(fontSize: 18)),
@@ -148,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.dispose();
   }
 
-  void doLogin() async{
+  void doLogin(bool initial) async{
     context.loaderOverlay.show();
     try {
       final navigator = Navigator.of(context);
@@ -169,6 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
           .showSnackBar(basicSnackBar(e.toString()));
     } finally {
       context.loaderOverlay.hide();
+      if(initial) FlutterNativeSplash.remove();
     }
   }
 

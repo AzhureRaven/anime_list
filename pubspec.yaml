@@ -42,6 +42,14 @@ dependencies:
   photo_view: ^0.14.0
   firebase_auth: ^4.6.1
   flutter_secure_storage: ^8.0.0
+  flutter_native_splash: ^2.0.1+1
+
+flutter_native_splash:
+  image: images/splash.jpg
+  color: "#3f51b5"
+  image_dark: images/splash.jpg
+  color_dark: "#212121"
+  web: false
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +76,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - images/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
