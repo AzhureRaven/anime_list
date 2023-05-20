@@ -1,6 +1,6 @@
 import 'package:anime_list/providers/anime_provider.dart';
+import 'package:anime_list/providers/secured_storage.dart';
 import 'package:anime_list/routes/account/login_screen.dart';
-import 'package:anime_list/routes/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -12,6 +12,7 @@ void main() async{
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform
   );
+  await SecuredStorage.initialize();
   runApp(const MyApp());
 }
 

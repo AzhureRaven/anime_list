@@ -1,3 +1,4 @@
+import 'package:anime_list/providers/secured_storage.dart';
 import 'package:anime_list/routes/account/login_screen.dart';
 import 'package:anime_list/routes/anime/manage_anime_screen.dart';
 import 'package:anime_list/routes/anime/anime_list_screen.dart';
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onSuccess: () {
                       Navigator.pop(context);
                       Navigator.pop(context);
+                      SecuredStorage.removeSession();
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
                         return const LoginScreen();
                       }));

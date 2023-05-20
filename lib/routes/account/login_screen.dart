@@ -1,3 +1,4 @@
+import 'package:anime_list/providers/secured_storage.dart';
 import 'package:anime_list/routes/account/register_screen.dart';
 import 'package:anime_list/routes/anime/anime_list_screen.dart';
 import 'package:anime_list/routes/home_screen.dart';
@@ -21,6 +22,20 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _passwordController = TextEditingController();
   bool _passVisible = true;
   int flex = 0;
+
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => checkLogin());
+  }
+
+  void checkLogin(){
+    if(!SecuredStorage.isEmpty()){
+      _emailController.text = SecuredStorage.getUser();
+      _passwordController.text = SecuredStorage.getPass();
+      doLogin();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,26 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
-              context.loaderOverlay.show();
-              try {
-                final navigator = Navigator.of(context);
-                final snackbar = ScaffoldMessenger.of(context);
-                final email = _emailController.text;
-                final password = _passwordController.text;
-                await _auth.signInWithEmailAndPassword(
-                    email: email, password: password);
-                navigator.pop();
-                navigator.push(MaterialPageRoute(builder: (context) {
-                  return HomeScreen();
-                }));
-                snackbar
-                    .showSnackBar(basicSnackBar("Login Succesful!"));
-              } catch (e) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(basicSnackBar(e.toString()));
-              } finally {
-                context.loaderOverlay.hide();
-              }
+              doLogin();
             }
           },
           child: const Text('Login', style: TextStyle(fontSize: 18)),
@@ -151,4 +147,29 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     _emailController.dispose();
   }
+
+  void doLogin() async{
+    context.loaderOverlay.show();
+    try {
+      final navigator = Navigator.of(context);
+      final snackbar = ScaffoldMessenger.of(context);
+      final email = _emailController.text;
+      final password = _passwordController.text;
+      await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      SecuredStorage.setSession(email, password);
+      navigator.pop();
+      navigator.push(MaterialPageRoute(builder: (context) {
+        return HomeScreen();
+      }));
+      snackbar
+          .showSnackBar(basicSnackBar("Login Succesful!"));
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(basicSnackBar(e.toString()));
+    } finally {
+      context.loaderOverlay.hide();
+    }
+  }
+
 }
