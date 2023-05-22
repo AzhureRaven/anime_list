@@ -1,7 +1,5 @@
-import 'package:anime_list/routes/episode/add_episode_screen.dart';
 import 'package:anime_list/routes/episode/update_episode_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../dialogs/yes_no_dialog.dart';
 import '../../models/anime.dart';
 import '../../models/episode.dart';
@@ -11,7 +9,8 @@ import '../../utlis/snackbar.dart';
 class EpisodeList extends StatefulWidget {
   final Anime anime;
   final AnimeProvider data;
-  const EpisodeList({Key? key, required this.anime, required this.data}) : super(key: key);
+  final String mode;
+  const EpisodeList({Key? key, required this.anime, required this.data, required this.mode}) : super(key: key);
 
   @override
   State<EpisodeList> createState() => _EpisodeListState();
@@ -20,31 +19,7 @@ class EpisodeList extends StatefulWidget {
 class _EpisodeListState extends State<EpisodeList> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Episode List", style: TextStyle(fontSize: 16)),
-            buildAddIconButton(context)
-          ],
-        ),
-        const Divider(thickness: 1, height: 3),
-        LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints){
-          if (constraints.maxWidth <= 600) {
-            return SizedBox(
-              height: 300,
-              child: buildList(context, widget.data),
-            );
-          } else {
-            return SizedBox(
-              height: 500,
-              child: buildList(context, widget.data),
-            );
-          }
-        })
-      ],
-    );
+    return widget.mode == "web" ? Expanded(child: buildList(context, widget.data)) : SizedBox(height: 300, child: buildList(context, widget.data));
   }
 
   Widget buildList(BuildContext context, AnimeProvider data) {
@@ -123,19 +98,6 @@ class _EpisodeListState extends State<EpisodeList> {
         );
       },
       icon: const Icon(Icons.delete),
-    );
-  }
-
-  Widget buildAddIconButton(BuildContext context) {
-    return IconButton(
-      icon: const Icon(
-        Icons.add,
-      ),
-      onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context){
-          return AddEpisodeScreen(anime: widget.anime);
-        }));
-      },
     );
   }
 }

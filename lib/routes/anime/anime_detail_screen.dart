@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../dialogs/yes_no_dialog.dart';
 import '../../models/anime.dart';
 import '../../utlis/snackbar.dart';
+import '../episode/add_episode_screen.dart';
 import 'anime_image_screen.dart';
 
 class AnimeDetailScreen extends StatelessWidget {
@@ -83,7 +84,9 @@ class AnimeDetailScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8.0),
-              buildAnimeEpisode(data)
+              buildAnimeHeader(context),
+              const Divider(thickness: 1, height: 3),
+              buildAnimeEpisode(data, "phone")
             ],
           ),
         ),
@@ -132,25 +135,25 @@ class AnimeDetailScreen extends StatelessWidget {
             child: Card(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(child: buildAnimeName(anime.name)),
-                          buildEditIconButton(context),
-                          buildDeleteIconButton(context, data),
-                        ],
-                      ),
-                      const SizedBox(height: 8.0),
-                      Text(anime.description),
-                      const SizedBox(height: 8.0),
-                      Text("Category: ${anime.categories}"),
-                      const SizedBox(height: 8.0),
-                      buildAnimeEpisode(data)
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(child: buildAnimeName(anime.name)),
+                        buildEditIconButton(context),
+                        buildDeleteIconButton(context, data),
+                      ],
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(anime.description),
+                    const SizedBox(height: 8.0),
+                    Text("Category: ${anime.categories}"),
+                    const SizedBox(height: 8.0),
+                    buildAnimeHeader(context),
+                    const Divider(thickness: 1, height: 3),
+                    buildAnimeEpisode(data, "web")
+                  ],
                 ),
               ),
             ),
@@ -282,7 +285,30 @@ class AnimeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildAnimeEpisode(AnimeProvider data) {
-    return EpisodeList(anime: anime, data: data);
+  Widget buildAnimeEpisode(AnimeProvider data, String mode) {
+    return EpisodeList(anime: anime, data: data, mode: mode);
+  }
+
+  Widget buildAnimeHeader(BuildContext context){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text("Episode List", style: TextStyle(fontSize: 16)),
+        buildAddEpisodeIconButton(context)
+      ],
+    );
+  }
+
+  Widget buildAddEpisodeIconButton(BuildContext context) {
+    return IconButton(
+      icon: const Icon(
+        Icons.add,
+      ),
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context){
+          return AddEpisodeScreen(anime: anime);
+        }));
+      },
+    );
   }
 }

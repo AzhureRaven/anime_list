@@ -171,6 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(basicSnackBar(e.toString()));
+      _passwordController.text = "";
     } finally {
       context.loaderOverlay.hide();
       if(initial) FlutterNativeSplash.remove();
