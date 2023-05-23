@@ -19,7 +19,6 @@ class UpdateAnimeScreen extends StatelessWidget {
         builder: (context, AnimeProvider data, widget) {
           return ManageAnimeScreen(onSuccess: (){
             ScaffoldMessenger.of(context).showSnackBar(basicSnackBar("Anime Updated"));
-            data.notify();
             Navigator.pop(context);
           }, anime: anime);
         },

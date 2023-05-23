@@ -59,8 +59,7 @@ class _EpisodeListState extends State<EpisodeList> {
     return Row(
       children: [
         Checkbox(value: episode.watched, onChanged: (da){
-          episode.watched = !episode.watched;
-          data.notify();
+          data.editEpisodeWatched(widget.anime, episode, !episode.watched);
         })
       ],
     );
@@ -88,10 +87,8 @@ class _EpisodeListState extends State<EpisodeList> {
             return YesNoDialog(
               onSuccess: () {
                 Navigator.pop(context);
-                widget.anime.episodes.remove(episode);
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(basicSnackBar("Episode Deleted"));
-                data.notify();
+                data.deleteEpisode(widget.anime, episode);
+                ScaffoldMessenger.of(context).showSnackBar(basicSnackBar("Episode Deleted"));
               }, title: 'Delete Anime?', content: 'Deleted Episode cannot be recovered',
             );
           },

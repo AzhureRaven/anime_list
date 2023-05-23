@@ -196,15 +196,10 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   if(mode == "add"){
-                    data.add(Anime(name: _nameController.text, description: _descController.text, rating: _ratingController.text, episodes: [], categories: _catController.text, studio: _studioController.text, img: _imgController.text));
+                    data.addAnime(Anime(name: _nameController.text, description: _descController.text, rating: _ratingController.text, episodes: [], categories: _catController.text, studio: _studioController.text, img: _imgController.text));
                   }
                   else{
-                    widget.anime!.name = _nameController.text;
-                    widget.anime!.description = _descController.text;
-                    widget.anime!.rating = _ratingController.text;
-                    widget.anime!.categories = _catController.text;
-                    widget.anime!.studio = _studioController.text;
-                    widget.anime!.img = _imgController.text;
+                    data.editAnime(widget.anime!, _nameController.text, _descController.text, _ratingController.text, _catController.text, _studioController.text, _imgController.text);
                   }
                   widget.onSuccess.call();
                 }

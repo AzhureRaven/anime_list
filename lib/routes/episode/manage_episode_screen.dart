@@ -140,14 +140,11 @@ class _ManageEpisodeScreenState extends State<ManageEpisodeScreen> {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   if(mode == "add"){
-                    widget.anime.episodes.add(Episode(no: int.parse(_noController.text.toString()), name: _nameController.text, watched: watched));
+                    data.addEpisode(widget.anime, Episode(no: int.parse(_noController.text.toString()), name: _nameController.text, watched: watched));
                   }
                   else{
-                    widget.episode!.name = _nameController.text;
-                    widget.episode!.no = int.parse(_noController.text.toString());
-                    widget.episode!.watched = watched;
+                    data.editEpisode(widget.anime, widget.episode!, _nameController.text, int.parse(_noController.text.toString()), watched);
                   }
-                  data.notify();
                   widget.onSuccess.call();
                 }
               }, child: const Text("Submit")),
