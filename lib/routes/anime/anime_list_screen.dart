@@ -27,60 +27,89 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: searchController,
-            decoration: InputDecoration(
-                labelText: 'Search Anime',
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    setState(() {
-                      search = searchController.text;
-                    });
-                  },
-                )),
+          child: Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.search,
+                    color: searchController.text.isNotEmpty
+                        ? Theme.of(context).colorScheme.primary
+                        : Colors.grey),
+                onPressed: () {
+                  setState(() {
+                    search = searchController.text;
+                  });
+                },
+              ),
+              Expanded(
+                child: Stack(alignment: const Alignment(1.0, 1.0), children: [
+                  TextField(
+                      decoration:
+                          const InputDecoration(hintText: 'Search Anime'),
+                      onChanged: (text) {
+                        setState(() {
+                          print(text);
+                        });
+                      },
+                      onSubmitted: (value){
+                        setState(() {
+                          search = searchController.text;
+                        });
+                      },
+                      controller: searchController),
+                  searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            setState(() {
+                              searchController.clear();
+                              search = searchController.text;
+                            });
+                          })
+                      : Container(height: 0.0)
+                ]),
+              ),
+            ],
           ),
         ),
         Expanded(
           child: Consumer<AnimeProvider>(
-            builder: (context, AnimeProvider data, widget){
-              data.initialize(context);
-              return LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  List<Anime> resultList = [];
-                  if (search.isNotEmpty) {
-                    for (int i = 0; i < data.animeList.length; i++) {
-                      String str1 = search.toUpperCase();
-                      String str2 = data.animeList[i].name.toUpperCase();
-                      if (str2.contains(str1)) {
-                        resultList.add(data.animeList[i]);
-                      }
-                    }
-                  } else {
-                    for (int i = 0; i < data.animeList.length; i++) {
+              builder: (context, AnimeProvider data, widget) {
+            data.initialize(context);
+            return LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                List<Anime> resultList = [];
+                if (search.isNotEmpty) {
+                  for (int i = 0; i < data.animeList.length; i++) {
+                    String str1 = search.toUpperCase();
+                    String str2 = data.animeList[i].name.toUpperCase();
+                    if (str2.contains(str1)) {
                       resultList.add(data.animeList[i]);
                     }
                   }
-                  if (resultList.isEmpty) {
-                    return const Center(
-                      child: Text("Maaf, tidak ada anime ditemukan",
-                          style: TextStyle(fontSize: 18)),
-                    );
-                  } else {
-                    if (constraints.maxWidth <= 600) {
-                      return buildAnimeList(context, resultList);
-                    } else if (constraints.maxWidth <= 900) {
-                      return buildAnimeGrid(context, resultList, 2);
-                    } else if (constraints.maxWidth <= 1200) {
-                      return buildAnimeGrid(context, resultList, 3);
-                    } else {
-                      return buildAnimeGrid(context, resultList, 4);
-                    }
+                } else {
+                  for (int i = 0; i < data.animeList.length; i++) {
+                    resultList.add(data.animeList[i]);
                   }
-                },
-              );
-            }
-          ),
+                }
+                if (resultList.isEmpty) {
+                  return const Center(
+                    child: Text("Maaf, tidak ada anime ditemukan",
+                        style: TextStyle(fontSize: 18)),
+                  );
+                } else {
+                  if (constraints.maxWidth <= 600) {
+                    return buildAnimeList(context, resultList);
+                  } else if (constraints.maxWidth <= 900) {
+                    return buildAnimeGrid(context, resultList, 2);
+                  } else if (constraints.maxWidth <= 1200) {
+                    return buildAnimeGrid(context, resultList, 3);
+                  } else {
+                    return buildAnimeGrid(context, resultList, 4);
+                  }
+                }
+              },
+            );
+          }),
         ),
       ],
     );
@@ -98,19 +127,21 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
         itemCount: listAnime.length);
   }
 
-  Widget buildAnimeGrid(BuildContext context, List<Anime> listAnime, int gridCount) {
+  Widget buildAnimeGrid(
+      BuildContext context, List<Anime> listAnime, int gridCount) {
     return GridView.count(
       crossAxisCount: gridCount,
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
-      children: listAnime.map((anime) => buildAnimeListGrid(context, anime)).toList(),
+      children:
+          listAnime.map((anime) => buildAnimeListGrid(context, anime)).toList(),
     );
   }
 
-  Widget buildAnimeListTile(BuildContext context, Anime anime){
+  Widget buildAnimeListTile(BuildContext context, Anime anime) {
     return InkWell(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context){
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
           return AnimeDetailScreen(anime: anime);
         }));
       },
@@ -119,8 +150,8 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
         children: [
           Expanded(
               flex: 2,
-              child: Image.network(anime.img, fit: BoxFit.fitWidth, width: double.infinity)
-          ),
+              child: Image.network(anime.img,
+                  fit: BoxFit.fitWidth, width: double.infinity)),
           Expanded(
               flex: 5,
               child: Padding(
@@ -128,7 +159,9 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(anime.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text(anime.name,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8.0),
                     Row(
                       children: [
@@ -156,18 +189,17 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
                     const SizedBox(height: 8.0),
                   ],
                 ),
-              )
-          )
+              ))
         ],
       ),
     );
   }
 
-  Widget buildAnimeListGrid(BuildContext context, Anime anime){
+  Widget buildAnimeListGrid(BuildContext context, Anime anime) {
     return Card(
       child: InkWell(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context){
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
             return AnimeDetailScreen(anime: anime);
           }));
         },
@@ -176,53 +208,52 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
             const SizedBox(height: 8.0),
             Expanded(
                 flex: 2,
-                child: Image.network(anime.img, fit: BoxFit.fitHeight)
-            ),
+                child: Image.network(anime.img, fit: BoxFit.fitHeight)),
             Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Column(
                     children: [
-                      Column(
+                      Text(anime.name,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(anime.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 8.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          Column(
                             children: [
-                              Column(
-                                children: [
-                                  const Icon(Icons.star),
-                                  const SizedBox(height: 8.0),
-                                  Text(anime.rating),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  const Icon(Icons.tv),
-                                  const SizedBox(width: 8.0),
-                                  Text("${anime.episodes.length}"),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  const Icon(Icons.movie),
-                                  const SizedBox(width: 8.0),
-                                  Text(anime.studio),
-                                ],
-                              )
+                              const Icon(Icons.star),
+                              const SizedBox(height: 8.0),
+                              Text(anime.rating),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              const Icon(Icons.tv),
+                              const SizedBox(width: 8.0),
+                              Text("${anime.episodes.length}"),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              const Icon(Icons.movie),
+                              const SizedBox(width: 8.0),
+                              Text(anime.studio),
                             ],
                           )
                         ],
-                      ),
+                      )
                     ],
                   ),
-                )
-            )
+                ],
+              ),
+            ))
           ],
         ),
       ),
     );
   }
-
 }
