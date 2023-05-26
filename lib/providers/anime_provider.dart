@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/anime.dart';
 import '../models/episode.dart';
 
 class AnimeProvider extends ChangeNotifier{
-  late final List<Anime> animeList;
+  List<Anime> animeList = [];
 
   void addAnime(Anime anime){
     animeList.add(anime);
@@ -58,10 +59,11 @@ class AnimeProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void initialize(BuildContext context) {
-    var data = DefaultAssetBundle.of(context).loadString('assets/anime.json');
-    data.then((value) => animeList = parseAnime(value));
-    notifyListeners();
+  void initialize(BuildContext context, QuerySnapshot<Map<String, dynamic>> json) {
+    if(animeList.isNotEmpty){
+      return;
+    }
+    animeList = parseAnime(json);
   }
 
 }

@@ -1,30 +1,31 @@
 import 'dart:convert';
 
 class Episode {
-  int no;
-  String name;
-  bool watched;
+  late int no;
+  late String name;
+  late bool watched;
 
-  Episode({required this.no,
+  Episode({
+    required this.no,
     required this.name,
-    required this.watched});
+    required this.watched,
+  });
 
-  factory Episode.fromJson(Map<String, dynamic> json) {
-    return Episode(
-        no: int.parse(json['no'].toString()),
-        name: json['name'].toString(),
-        watched: json['watched']
-    );
+  Map<String, dynamic> toMap() {
+    return {
+      "no": no,
+      "name": name,
+      "watched": watched,
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['no'] = this.no;
-    data['name'] = this.name;
-    data['watched'] = this.watched;
-    return data;
+  Episode.fromMap(Map<String, dynamic> map) {
+    no = int.parse(map["no"].toString());
+    name = map["name"].toString();
+    watched = map["watched"] as bool;
   }
 }
+
 
 /*List<Anime> parseAnime(String? json) {
   if (json == null) {

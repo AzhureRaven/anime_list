@@ -1,49 +1,64 @@
 import 'dart:convert';
 
 import 'package:anime_list/models/episode.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Anime {
-  String name;
-  String description;
-  String rating;
-  List<Episode> episodes;
-  String categories;
-  String studio;
-  String img;
+  late String name;
+  late String description;
+  late String rating;
+  late List<Episode> episodes;
+  late String categories;
+  late String studio;
+  late String img;
 
-  Anime({required this.name,
-      required this.description,
-      required this.rating,
-      required this.episodes,
-      required this.categories,
-      required this.studio,
-      required this.img});
+  Anime({
+    required this.name,
+    required this.description,
+    required this.rating,
+    required this.episodes,
+    required this.categories,
+    required this.studio,
+    required this.img,
+  });
 
-  factory Anime.fromJson(Map<String, dynamic> json) {
-    return Anime(
-      name: json['name'].toString(),
-      description: json['description'].toString(),
-      rating: json['rating'].toString(),
-      episodes: [],
-      categories: json['categorie'].toString(),
-      studio: json['studio'].toString(),
-      img: json['img'].toString()
-    );
+  Map<String, dynamic> toMap() {
+    return {
+      "name": name,
+      "description": description,
+      "rating": rating,
+      "episodes": episodes.map((episode) => episode.toMap()).toList(),
+      "categories": categories,
+      "studio": studio,
+      "img": img,
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['rating'] = this.rating;
-    data['categorie'] = this.categories;
-    data['studio'] = this.studio;
-    data['img'] = this.img;
-    return data;
+  Anime.fromMap(Map<String, dynamic> map) {
+    name = map["name"].toString();
+    description = map["description"].toString();
+    rating = map["rating"].toString();
+    episodes = map["episodes"] != null ? (map["episodes"] as List<dynamic>)
+        .map((episode) => Episode.fromMap(episode as Map<String, dynamic>))
+        .toList() : [];
+    categories = map["categories"].toString();
+    studio = map["studio"].toString();
+    img = map["img"].toString();
   }
 }
 
-List<Anime> parseAnime(String? json) {
+
+List<Anime> parseAnime(QuerySnapshot<Map<String, dynamic>>? querySnapshot) {
+  if (querySnapshot == null) {
+    return [];
+  }
+
+  return querySnapshot.docs.map((doc) {
+    return Anime.fromMap(doc.data());
+  }).toList();
+}
+
+/*List<Anime> parseAnime(String? json) {
   if (json == null) {
     return [];
   }
@@ -51,7 +66,7 @@ List<Anime> parseAnime(String? json) {
   final List<dynamic> parsed = jsonDecode(json);
 
   return parsed.map((json) => Anime.fromJson(json)).toList();
-}
+}*/
 
 /*List<Anime> animeList = [
   Anime(

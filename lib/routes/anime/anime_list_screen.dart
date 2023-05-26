@@ -1,5 +1,6 @@
 import 'package:anime_list/providers/anime_provider.dart';
 import 'package:anime_list/routes/anime/anime_detail_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/anime.dart';
@@ -13,6 +14,7 @@ class AnimeListScreen extends StatefulWidget {
 
 class _AnimeListScreenState extends State<AnimeListScreen> {
   TextEditingController searchController = TextEditingController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String search = "";
 
   @override
@@ -47,10 +49,10 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
                           const InputDecoration(hintText: 'Search Anime'),
                       onChanged: (text) {
                         setState(() {
-                          print(text);
+                          search = searchController.text;
                         });
                       },
-                      onSubmitted: (value){
+                      onSubmitted: (value) {
                         setState(() {
                           search = searchController.text;
                         });
@@ -72,46 +74,59 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
           ),
         ),
         Expanded(
-          child: Consumer<AnimeProvider>(
-              builder: (context, AnimeProvider data, widget) {
-            data.initialize(context);
-            return LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                List<Anime> resultList = [];
-                if (search.isNotEmpty) {
-                  for (int i = 0; i < data.animeList.length; i++) {
-                    String str1 = search.toUpperCase();
-                    String str2 = data.animeList[i].name.toUpperCase();
-                    if (str2.contains(str1)) {
-                      resultList.add(data.animeList[i]);
-                    }
-                  }
+            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: _firestore.collection("anime").orderBy('name', descending: true).snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
                 } else {
-                  for (int i = 0; i < data.animeList.length; i++) {
-                    resultList.add(data.animeList[i]);
-                  }
-                }
-                if (resultList.isEmpty) {
-                  return const Center(
-                    child: Text("Maaf, tidak ada anime ditemukan",
-                        style: TextStyle(fontSize: 18)),
-                  );
-                } else {
-                  if (constraints.maxWidth <= 600) {
-                    return buildAnimeList(context, resultList);
-                  } else if (constraints.maxWidth <= 900) {
-                    return buildAnimeGrid(context, resultList, 2);
-                  } else if (constraints.maxWidth <= 1200) {
-                    return buildAnimeGrid(context, resultList, 3);
-                  } else {
-                    return buildAnimeGrid(context, resultList, 4);
-                  }
+                  return Consumer<AnimeProvider>(
+                      builder: (context, AnimeProvider data, widget) {
+                        data.initialize(context, snapshot.data!);
+                        return buildLayout(context, data);
+                  });
                 }
               },
-            );
-          }),
+            )
         ),
       ],
+    );
+  }
+
+  Widget buildLayout(BuildContext context, AnimeProvider data) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        List<Anime> resultList = [];
+        if (search.isNotEmpty) {
+          for (int i = 0; i < data.animeList.length; i++) {
+            String str1 = search.toUpperCase();
+            String str2 = data.animeList[i].name.toUpperCase();
+            if (str2.contains(str1)) {
+              resultList.add(data.animeList[i]);
+            }
+          }
+        } else {
+          for (int i = 0; i < data.animeList.length; i++) {
+            resultList.add(data.animeList[i]);
+          }
+        }
+        if (resultList.isEmpty) {
+          return const Center(
+            child: Text("Maaf, tidak ada anime ditemukan",
+                style: TextStyle(fontSize: 18)),
+          );
+        } else {
+          if (constraints.maxWidth <= 600) {
+            return buildAnimeList(context, resultList);
+          } else if (constraints.maxWidth <= 900) {
+            return buildAnimeGrid(context, resultList, 2);
+          } else if (constraints.maxWidth <= 1200) {
+            return buildAnimeGrid(context, resultList, 3);
+          } else {
+            return buildAnimeGrid(context, resultList, 4);
+          }
+        }
+      },
     );
   }
 
