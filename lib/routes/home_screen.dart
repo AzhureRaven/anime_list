@@ -1,8 +1,10 @@
+import 'package:anime_list/providers/anime_provider.dart';
 import 'package:anime_list/providers/secured_storage.dart';
 import 'package:anime_list/routes/account/login_screen.dart';
 import 'package:anime_list/routes/anime/manage_anime_screen.dart';
 import 'package:anime_list/routes/anime/anime_list_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../dialogs/yes_no_dialog.dart';
 import '../utlis/snackbar.dart';
 
@@ -36,15 +38,20 @@ class _HomeScreenState extends State<HomeScreen> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return YesNoDialog(
-                    onSuccess: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      SecuredStorage.removeSession();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return const LoginScreen();
-                      }));
-                    }, title: 'Logout?', content: '',
+                  return Consumer<AnimeProvider>(
+                  builder: (context, AnimeProvider data, widgets) {
+                    return YesNoDialog(
+                      onSuccess: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        SecuredStorage.removeSession();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                          return const LoginScreen();
+                        }));
+                        data.logout();
+                      }, title: 'Logout?', content: '',
+                    );
+                  }
                   );
                 },
               );

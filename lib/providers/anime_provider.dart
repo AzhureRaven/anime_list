@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:anime_list/providers/secured_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/anime.dart';
@@ -5,10 +8,18 @@ import '../models/episode.dart';
 
 class AnimeProvider extends ChangeNotifier{
   List<Anime> animeList = [];
+  bool initialized = false;
+  final _firestore = FirebaseFirestore.instance;
 
-  void addAnime(Anime anime){
-    animeList.add(anime);
-    notifyListeners();
+  void addAnime(Anime anime) async{
+    _firestore.collection("anime").add(anime.toMap()).then((docRef) {
+      anime.id = docRef.id;
+      animeList.add(anime);
+      notifyListeners();
+    }).catchError((e) {
+      print(e.toString());
+    });
+
   }
 
   void editAnime(Anime anime, String name, String desc, String rating, String categories, String studio, String img){
@@ -60,10 +71,16 @@ class AnimeProvider extends ChangeNotifier{
   }
 
   void initialize(BuildContext context, QuerySnapshot<Map<String, dynamic>> json) {
-    if(animeList.isNotEmpty){
-      return;
+    if(!initialized){
+      animeList.clear();
+      animeList.addAll(parseAnime(json).where((anime) => anime.owner == SecuredStorage.getUser()));
+      initialized = true;
     }
-    animeList = parseAnime(json);
+  }
+
+  void logout(){
+    animeList.clear();
+    initialized = false;
   }
 
 }

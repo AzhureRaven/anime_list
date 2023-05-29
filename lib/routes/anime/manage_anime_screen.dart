@@ -2,6 +2,7 @@ import 'package:anime_list/models/anime.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/anime_provider.dart';
+import '../../providers/secured_storage.dart';
 
 class ManageAnimeScreen extends StatefulWidget {
   final VoidCallback onSuccess;
@@ -192,11 +193,11 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
         Row(
           children: [
             Expanded(
-              child: ElevatedButton(onPressed: () {
+              child: ElevatedButton(onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   if(mode == "add"){
-                    data.addAnime(Anime(name: _nameController.text, description: _descController.text, rating: _ratingController.text, episodes: [], categories: _catController.text, studio: _studioController.text, img: _imgController.text));
+                    data.addAnime(Anime(id: "", name: _nameController.text, owner: SecuredStorage.getUser(), description: _descController.text, rating: _ratingController.text, episodes: [], categories: _catController.text, studio: _studioController.text, img: _imgController.text));
                   }
                   else{
                     data.editAnime(widget.anime!, _nameController.text, _descController.text, _ratingController.text, _catController.text, _studioController.text, _imgController.text);

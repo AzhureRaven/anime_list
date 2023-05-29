@@ -14,6 +14,7 @@ void main() async{
       options: DefaultFirebaseOptions.currentPlatform
   );
   await SecuredStorage.initialize();
+  await SecuredStorage.checkExpiry();
   await Future.delayed(const Duration(seconds: 2));
   runApp(const MyApp());
 }

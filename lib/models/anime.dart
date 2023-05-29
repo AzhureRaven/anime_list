@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:anime_list/models/episode.dart';
+import 'package:anime_list/providers/secured_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Anime {
+  late String id;
   late String name;
+  late String owner;
   late String description;
   late String rating;
   late List<Episode> episodes;
@@ -13,7 +16,9 @@ class Anime {
   late String img;
 
   Anime({
+    required this.id,
     required this.name,
+    required this.owner,
     required this.description,
     required this.rating,
     required this.episodes,
@@ -25,6 +30,7 @@ class Anime {
   Map<String, dynamic> toMap() {
     return {
       "name": name,
+      "owner": owner,
       "description": description,
       "rating": rating,
       "episodes": episodes.map((episode) => episode.toMap()).toList(),
@@ -34,8 +40,10 @@ class Anime {
     };
   }
 
-  Anime.fromMap(Map<String, dynamic> map) {
+  Anime.fromMap(Map<String, dynamic> map, String idx) {
+    id = idx;
     name = map["name"].toString();
+    owner = map["owner"].toString();
     description = map["description"].toString();
     rating = map["rating"].toString();
     episodes = map["episodes"] != null ? (map["episodes"] as List<dynamic>)
@@ -54,7 +62,7 @@ List<Anime> parseAnime(QuerySnapshot<Map<String, dynamic>>? querySnapshot) {
   }
 
   return querySnapshot.docs.map((doc) {
-    return Anime.fromMap(doc.data());
+    return Anime.fromMap(doc.data(), doc.id);
   }).toList();
 }
 
