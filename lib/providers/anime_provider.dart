@@ -19,7 +19,6 @@ class AnimeProvider extends ChangeNotifier{
     }).catchError((e) {
       print(e.toString());
     });
-
   }
 
   void editAnime(Anime anime, String name, String desc, String rating, String categories, String studio, String img){
@@ -38,9 +37,11 @@ class AnimeProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void addEpisode(Anime anime, Episode episode){
+  void addEpisode(Anime anime, Episode episode) async{
     Anime edit = animeList[animeList.indexOf(anime)];
     edit.episodes.add(episode);
+    edit.episodes.sort((a, b) => a.no.compareTo(b.no));
+    _firestore.collection("anime").doc(edit.id).set(anime.toMap());
     notifyListeners();
   }
 
@@ -50,6 +51,8 @@ class AnimeProvider extends ChangeNotifier{
     ep.name = name;
     ep.no = no;
     ep.watched = watched;
+    edit.episodes.sort((a, b) => a.no.compareTo(b.no));
+    _firestore.collection("anime").doc(edit.id).set(anime.toMap());
     notifyListeners();
   }
 
@@ -57,12 +60,15 @@ class AnimeProvider extends ChangeNotifier{
     Anime edit = animeList[animeList.indexOf(anime)];
     Episode ep = edit.episodes[edit.episodes.indexOf(episode)];
     ep.watched = watched;
+    _firestore.collection("anime").doc(edit.id).set(anime.toMap());
     notifyListeners();
   }
 
   void deleteEpisode(Anime anime, Episode episode){
     Anime edit = animeList[animeList.indexOf(anime)];
     edit.episodes.remove(episode);
+    edit.episodes.sort((a, b) => a.no.compareTo(b.no));
+    _firestore.collection("anime").doc(edit.id).set(anime.toMap());
     notifyListeners();
   }
 

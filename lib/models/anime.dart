@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:anime_list/models/episode.dart';
-import 'package:anime_list/providers/secured_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Anime {
@@ -46,9 +43,12 @@ class Anime {
     owner = map["owner"].toString();
     description = map["description"].toString();
     rating = map["rating"].toString();
-    episodes = map["episodes"] != null ? (map["episodes"] as List<dynamic>)
+    episodes = map["episodes"] != null
+        ? (map["episodes"] as List<dynamic>)
         .map((episode) => Episode.fromMap(episode as Map<String, dynamic>))
-        .toList() : [];
+        .toList()
+        : [];
+    episodes.sort((a, b) => a.no.compareTo(b.no));
     categories = map["categories"].toString();
     studio = map["studio"].toString();
     img = map["img"].toString();
