@@ -50,7 +50,7 @@ flutter_native_splash:
   color: "#3f51b5"
   image_dark: images/splash.jpg
   color_dark: "#212121"
-  web: false
+  # web: false
 
 dev_dependencies:
   flutter_test:

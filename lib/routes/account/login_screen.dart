@@ -1,12 +1,10 @@
 import 'package:anime_list/providers/secured_storage.dart';
 import 'package:anime_list/routes/account/register_screen.dart';
-import 'package:anime_list/routes/anime/anime_list_screen.dart';
 import 'package:anime_list/routes/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-
 import '../../utlis/snackbar.dart';
 
 class LoginScreen extends StatefulWidget {
