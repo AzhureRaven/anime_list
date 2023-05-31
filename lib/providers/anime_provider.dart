@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import '../models/anime.dart';
 import '../models/episode.dart';
 
-class AnimeProvider extends ChangeNotifier{
+class AnimeProvider extends ChangeNotifier {
   List<Anime> animeList = [];
   bool initialized = false;
   final _firestore = FirebaseFirestore.instance;
 
-  void addAnime(Anime anime) async{
+  void addAnime(Anime anime) async {
     _firestore.collection("anime").add(anime.toMap()).then((docRef) {
       anime.id = docRef.id;
       animeList.add(anime);
@@ -19,7 +19,8 @@ class AnimeProvider extends ChangeNotifier{
     });
   }
 
-  void editAnime(Anime anime, String name, String desc, String rating, String categories, String studio, String img){
+  void editAnime(Anime anime, String name, String desc, String rating,
+      String categories, String studio, String img) {
     Anime edit = animeList[animeList.indexOf(anime)];
     edit.name = name;
     edit.description = desc;
@@ -27,15 +28,16 @@ class AnimeProvider extends ChangeNotifier{
     edit.categories = categories;
     edit.studio = studio;
     edit.img = img;
+    _firestore.collection("anime").doc(edit.id).set(anime.toMap());
     notifyListeners();
   }
 
-  void deleteAnime(Anime anime){
+  void deleteAnime(Anime anime) {
     animeList.remove(anime);
     notifyListeners();
   }
 
-  void addEpisode(Anime anime, Episode episode) async{
+  void addEpisode(Anime anime, Episode episode) async {
     Anime edit = animeList[animeList.indexOf(anime)];
     edit.episodes.add(episode);
     edit.episodes.sort((a, b) => a.no.compareTo(b.no));
@@ -43,7 +45,8 @@ class AnimeProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void editEpisode(Anime anime, Episode episode, String name, int no, bool watched){
+  void editEpisode(
+      Anime anime, Episode episode, String name, int no, bool watched) {
     Anime edit = animeList[animeList.indexOf(anime)];
     Episode ep = edit.episodes[edit.episodes.indexOf(episode)];
     ep.name = name;
@@ -54,7 +57,7 @@ class AnimeProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void editEpisodeWatched(Anime anime, Episode episode, bool watched){
+  void editEpisodeWatched(Anime anime, Episode episode, bool watched) {
     Anime edit = animeList[animeList.indexOf(anime)];
     Episode ep = edit.episodes[edit.episodes.indexOf(episode)];
     ep.watched = watched;
@@ -62,7 +65,7 @@ class AnimeProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void deleteEpisode(Anime anime, Episode episode){
+  void deleteEpisode(Anime anime, Episode episode) {
     Anime edit = animeList[animeList.indexOf(anime)];
     edit.episodes.remove(episode);
     edit.episodes.sort((a, b) => a.no.compareTo(b.no));
@@ -70,21 +73,22 @@ class AnimeProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void notify(){
+  void notify() {
     notifyListeners();
   }
 
-  void initialize(BuildContext context, QuerySnapshot<Map<String, dynamic>> json) {
-    if(!initialized){
+  void initialize(
+      BuildContext context, QuerySnapshot<Map<String, dynamic>> json) {
+    if (!initialized) {
       animeList.clear();
-      animeList.addAll(parseAnime(json).where((anime) => anime.owner == SecuredStorage.getUser()));
+      animeList.addAll(parseAnime(json)
+          .where((anime) => anime.owner == SecuredStorage.getUser()));
       initialized = true;
     }
   }
 
-  void logout(){
+  void logout() {
     animeList.clear();
     initialized = false;
   }
-
 }
