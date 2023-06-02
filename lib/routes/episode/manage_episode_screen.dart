@@ -19,6 +19,7 @@ class _ManageEpisodeScreenState extends State<ManageEpisodeScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _noController;
   bool watched = false;
+  int curEpisode = -1;
   String mode = "add";
   int flex = 0;
 
@@ -37,6 +38,7 @@ class _ManageEpisodeScreenState extends State<ManageEpisodeScreen> {
       _nameController.text = widget.episode!.name;
       _noController.text = widget.episode!.no.toString();
       watched = widget.episode!.watched;
+      curEpisode = widget.episode!.no;
     }
   }
 
@@ -100,6 +102,11 @@ class _ManageEpisodeScreenState extends State<ManageEpisodeScreen> {
             }
             if(1 > int.parse(data.toString())){
               return "Field must be between > 0!";
+            }
+            if(widget.anime.noDuplicate(int.parse(data.toString()))){
+              if(curEpisode != int.parse(data.toString())){
+                return "Episode number already picked!";
+              }
             }
             return null;
           },

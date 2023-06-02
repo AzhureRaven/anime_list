@@ -53,6 +53,10 @@ class Anime {
     studio = map["studio"].toString();
     img = map["img"].toString();
   }
+
+  bool noDuplicate(int no) {
+    return episodes.any((episode) => episode.no == no);
+  }
 }
 
 
