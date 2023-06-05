@@ -20,7 +20,7 @@ class AnimeProvider extends ChangeNotifier {
   }
 
   void editAnime(Anime anime, String name, String desc, String rating,
-      String categories, String studio, String img) {
+      String categories, String studio, String img) async {
     Anime edit = animeList[animeList.indexOf(anime)];
     edit.name = name;
     edit.description = desc;
@@ -28,12 +28,14 @@ class AnimeProvider extends ChangeNotifier {
     edit.categories = categories;
     edit.studio = studio;
     edit.img = img;
-    _firestore.collection("anime").doc(edit.id).set(anime.toMap());
+    await _firestore.collection("anime").doc(edit.id).set(anime.toMap());
     notifyListeners();
   }
 
-  void deleteAnime(Anime anime) {
-    animeList.remove(anime);
+  void deleteAnime(Anime anime) async {
+    Anime edit = animeList[animeList.indexOf(anime)];
+    await _firestore.collection("anime").doc(edit.id).delete();
+    animeList.remove(edit);
     notifyListeners();
   }
 
@@ -41,35 +43,34 @@ class AnimeProvider extends ChangeNotifier {
     Anime edit = animeList[animeList.indexOf(anime)];
     edit.episodes.add(episode);
     edit.episodes.sort((a, b) => a.no.compareTo(b.no));
-    _firestore.collection("anime").doc(edit.id).set(anime.toMap());
+    await _firestore.collection("anime").doc(edit.id).set(anime.toMap());
     notifyListeners();
   }
 
-  void editEpisode(
-      Anime anime, Episode episode, String name, int no, bool watched) {
+  void editEpisode(Anime anime, Episode episode, String name, int no, bool watched) async {
     Anime edit = animeList[animeList.indexOf(anime)];
     Episode ep = edit.episodes[edit.episodes.indexOf(episode)];
     ep.name = name;
     ep.no = no;
     ep.watched = watched;
     edit.episodes.sort((a, b) => a.no.compareTo(b.no));
-    _firestore.collection("anime").doc(edit.id).set(anime.toMap());
+    await _firestore.collection("anime").doc(edit.id).set(anime.toMap());
     notifyListeners();
   }
 
-  void editEpisodeWatched(Anime anime, Episode episode, bool watched) {
+  void editEpisodeWatched(Anime anime, Episode episode, bool watched) async {
     Anime edit = animeList[animeList.indexOf(anime)];
     Episode ep = edit.episodes[edit.episodes.indexOf(episode)];
     ep.watched = watched;
-    _firestore.collection("anime").doc(edit.id).set(anime.toMap());
+    await _firestore.collection("anime").doc(edit.id).set(anime.toMap());
     notifyListeners();
   }
 
-  void deleteEpisode(Anime anime, Episode episode) {
+  void deleteEpisode(Anime anime, Episode episode) async {
     Anime edit = animeList[animeList.indexOf(anime)];
     edit.episodes.remove(episode);
     edit.episodes.sort((a, b) => a.no.compareTo(b.no));
-    _firestore.collection("anime").doc(edit.id).set(anime.toMap());
+    await _firestore.collection("anime").doc(edit.id).set(anime.toMap());
     notifyListeners();
   }
 
