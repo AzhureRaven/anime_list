@@ -1,5 +1,6 @@
 import 'package:anime_list/providers/anime_provider.dart';
 import 'package:anime_list/routes/anime/anime_detail_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -165,8 +166,13 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
         children: [
           Expanded(
               flex: 2,
-              child: Image.network(anime.img,
-                  fit: BoxFit.fitWidth, width: double.infinity)),
+              child: CachedNetworkImage(
+                  imageUrl :anime.img,
+                  placeholder: (context, url) => Image.asset('images/splash.jpg',fit: BoxFit.fitWidth, width: double.infinity),
+                  errorWidget: (context, url, error) => Image.asset('images/splash.jpg',fit: BoxFit.fitWidth, width: double.infinity),
+                  fit: BoxFit.fitWidth, width: double.infinity
+              )
+          ),
           Expanded(
               flex: 5,
               child: Padding(

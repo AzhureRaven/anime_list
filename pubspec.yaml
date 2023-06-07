@@ -44,6 +44,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   flutter_native_splash: ^2.0.1+1
   cloud_firestore: ^4.7.1
+  cached_network_image: ^3.2.3
 
 flutter_native_splash:
   image: images/splash.jpg

@@ -2,6 +2,7 @@ import 'package:anime_list/models/episode.dart';
 import 'package:anime_list/providers/anime_provider.dart';
 import 'package:anime_list/routes/anime/update_anime_screen.dart';
 import 'package:anime_list/routes/episode/episode_list.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../dialogs/yes_no_dialog.dart';
@@ -167,11 +168,14 @@ class AnimeDetailScreen extends StatelessWidget {
   Widget buildAnimeImage(String img) {
     return Hero(
       tag: img,
-      child: Image.network(
-        img,
-        fit: BoxFit.fitHeight,
-        height: 300
-      ),
+      child: CachedNetworkImage(
+          imageUrl :img,
+          placeholder: (context, url) => Image.asset('images/splash.jpg',fit: BoxFit.cover, height: 300, width: 200),
+          errorWidget: (context, url, error) => Image.asset('images/splash.jpg',fit: BoxFit.cover, height: 300, width: 200),
+          fit: BoxFit.cover,
+          height: 300,
+          width: 200,
+      )
     );
   }
 

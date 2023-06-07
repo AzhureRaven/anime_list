@@ -116,6 +116,9 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
         ),
         TextFormField(
           controller: _descController,
+          keyboardType: TextInputType.multiline,
+          minLines: 1,
+          maxLines: 5,
           textInputAction: TextInputAction.next,
           validator: (data) {
             if (data != null && data != "") {
@@ -178,6 +181,9 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
         ),
         TextFormField(
           controller: _imgController,
+          keyboardType: TextInputType.multiline,
+          minLines: 1,
+          maxLines: 2,
           validator: (data) {
             if (data != null && data != "") {
               return null;
