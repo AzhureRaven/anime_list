@@ -1,5 +1,6 @@
 import 'package:anime_list/providers/secured_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '../models/anime.dart';
 import '../models/episode.dart';
