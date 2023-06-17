@@ -1,4 +1,3 @@
-import 'package:anime_list/utlis/secured_storage.dart';
 import 'package:anime_list/routes/account/register_screen.dart';
 import 'package:anime_list/routes/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -85,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
         const SizedBox(height: 24),
         TextFormField(
           controller: _emailController,
+          keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
           validator: (data) {
             if (data != null && data != "") {

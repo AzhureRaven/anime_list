@@ -64,6 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         const SizedBox(height: 24),
         TextFormField(
           controller: _emailController,
+          keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
           validator: (data) {
             if (data != null && data != "") {
