@@ -229,7 +229,12 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
             const SizedBox(height: 8.0),
             Expanded(
                 flex: 2,
-                child: Image.network(anime.img, fit: BoxFit.fitHeight)),
+                child: CachedNetworkImage(
+                    imageUrl :anime.img,
+                    placeholder: (context, url) => Image.asset('images/splash.jpg',fit: BoxFit.fitWidth, width: double.infinity),
+                    errorWidget: (context, url, error) => Image.asset('images/splash.jpg',fit: BoxFit.fitWidth, width: double.infinity),
+                    fit: BoxFit.fitHeight
+                )),
             Expanded(
                 child: Padding(
               padding: const EdgeInsets.all(8.0),

@@ -1,8 +1,9 @@
 import 'package:anime_list/models/anime.dart';
+import 'package:anime_list/providers/secured_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/anime_provider.dart';
-import '../../providers/secured_storage.dart';
+import '../../utlis/secured_storage.dart';
 
 class ManageAnimeScreen extends StatefulWidget {
   final VoidCallback onSuccess;
@@ -203,7 +204,8 @@ class _ManageAnimeScreenState extends State<ManageAnimeScreen> {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   if(mode == "add"){
-                    data.addAnime(Anime(id: "", name: _nameController.text, owner: SecuredStorage.getUser(), description: _descController.text, rating: _ratingController.text, episodes: [], categories: _catController.text, studio: _studioController.text, img: _imgController.text));
+                    final securedStorage = Provider.of<SecuredProvider>(context, listen: false);
+                    data.addAnime(Anime(id: "", name: _nameController.text, owner: securedStorage.getUser(), description: _descController.text, rating: _ratingController.text, episodes: [], categories: _catController.text, studio: _studioController.text, img: _imgController.text));
                   }
                   else{
                     data.editAnime(widget.anime!, _nameController.text, _descController.text, _ratingController.text, _catController.text, _studioController.text, _imgController.text);

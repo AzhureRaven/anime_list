@@ -1,7 +1,8 @@
-import 'package:anime_list/providers/secured_storage.dart';
+import 'package:anime_list/providers/secured_provider.dart';
+import 'package:anime_list/utlis/secured_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/anime.dart';
 import '../models/episode.dart';
 
@@ -83,8 +84,9 @@ class AnimeProvider extends ChangeNotifier {
       BuildContext context, QuerySnapshot<Map<String, dynamic>> json) {
     if (!initialized) {
       animeList.clear();
+      final securedStorage = Provider.of<SecuredProvider>(context, listen: false);
       animeList.addAll(parseAnime(json)
-          .where((anime) => anime.owner == SecuredStorage.getUser()));
+          .where((anime) => anime.owner == securedStorage.getUser()));
       initialized = true;
     }
   }

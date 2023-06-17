@@ -1,10 +1,12 @@
-import 'package:anime_list/providers/secured_storage.dart';
+import 'package:anime_list/utlis/secured_storage.dart';
 import 'package:anime_list/routes/account/register_screen.dart';
 import 'package:anime_list/routes/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:provider/provider.dart';
+import '../../providers/secured_provider.dart';
 import '../../utlis/snackbar.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -24,14 +26,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => checkLogin());
+    WidgetsBinding.instance.addPostFrameCallback((_) => checkLogin());
   }
 
   void checkLogin(){
-    if(!SecuredStorage.isEmpty()){
-      _emailController.text = SecuredStorage.getUser();
-      _passwordController.text = SecuredStorage.getPass();
+    final securedStorage = Provider.of<SecuredProvider>(context, listen: false);
+    if(!securedStorage.isEmpty()){
+      _emailController.text = securedStorage.getUser();
+      _passwordController.text = securedStorage.getPass();
       doLogin(true);
     }
     else{
@@ -155,14 +157,15 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final navigator = Navigator.of(context);
       final snackbar = ScaffoldMessenger.of(context);
+      final securedStorage = Provider.of<SecuredProvider>(context, listen: false);
       final email = _emailController.text;
       final password = _passwordController.text;
       await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      SecuredStorage.setSession(email, password);
+      securedStorage.setSession(email, password);
       navigator.pop();
       navigator.push(MaterialPageRoute(builder: (context) {
-        return HomeScreen();
+        return const HomeScreen();
       }));
       snackbar
           .showSnackBar(basicSnackBar("Login Succesful!"));

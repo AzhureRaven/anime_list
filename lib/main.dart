@@ -1,5 +1,6 @@
 import 'package:anime_list/providers/anime_provider.dart';
-import 'package:anime_list/providers/secured_storage.dart';
+import 'package:anime_list/providers/secured_provider.dart';
+import 'package:anime_list/utlis/secured_storage.dart';
 import 'package:anime_list/routes/account/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
       ChangeNotifierProvider(create: (context)=>AnimeProvider()),
-      ChangeNotifierProvider(create: (context)=>SecuredStorage()),
+      ChangeNotifierProvider(create: (context)=>SecuredProvider()),
     ],
       child: GlobalLoaderOverlay(
         child: MaterialApp(
