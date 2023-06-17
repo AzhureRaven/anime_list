@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class SecuredStorage {
+class SecuredStorage extends ChangeNotifier {
   static late FlutterSecureStorage _storage;
   // preference keys
   static const _USER_KEY = 'user';

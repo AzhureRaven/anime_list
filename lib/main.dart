@@ -4,7 +4,6 @@ import 'package:anime_list/routes/account/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -42,8 +41,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context)=>AnimeProvider(),
+    return MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context)=>AnimeProvider()),
+      ChangeNotifierProvider(create: (context)=>SecuredStorage()),
+    ],
       child: GlobalLoaderOverlay(
         child: MaterialApp(
           title: 'Anime List',
