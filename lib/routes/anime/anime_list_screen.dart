@@ -33,10 +33,7 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
           child: Row(
             children: [
               IconButton(
-                icon: Icon(Icons.search,
-                    color: searchController.text.isNotEmpty
-                        ? Theme.of(context).colorScheme.primary
-                        : Colors.grey),
+                icon: Icon(Icons.search, color: searchController.text.isNotEmpty ? Theme.of(context).colorScheme.primary : Colors.grey),
                 onPressed: () {
                   setState(() {
                     search = searchController.text;
@@ -46,8 +43,7 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
               Expanded(
                 child: Stack(alignment: const Alignment(1.0, 1.0), children: [
                   TextField(
-                      decoration:
-                          const InputDecoration(hintText: 'Search Anime'),
+                      decoration: const InputDecoration(hintText: 'Search Anime'),
                       onChanged: (text) {
                         setState(() {
                           search = searchController.text;
@@ -59,9 +55,8 @@ class _AnimeListScreenState extends State<AnimeListScreen> {
                         });
                       },
                       controller: searchController),
-                  searchController.text.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear),
+                  searchController.text.isNotEmpty ? IconButton(
+                      icon: const Icon(Icons.clear),
                           onPressed: () {
                             setState(() {
                               searchController.clear();

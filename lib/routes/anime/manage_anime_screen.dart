@@ -3,7 +3,6 @@ import 'package:anime_list/providers/secured_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/anime_provider.dart';
-import '../../utlis/secured_storage.dart';
 
 class ManageAnimeScreen extends StatefulWidget {
   final VoidCallback onSuccess;
